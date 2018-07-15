@@ -7,7 +7,7 @@ block content
   script(src="/socket.io/socket.io.js")
   script(src="https://d3js.org/d3.v5.min.js")
   script.
-    var socket = io('//localhost:3000');
+    var socket = io('//localhost:3001');
     socket.on('update', function (data) {
       let innerHTML = "";
       for(let host in data){
