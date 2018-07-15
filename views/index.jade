@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  #content
+  script(src="/socket.io/socket.io.js")
+  script(src="https://d3js.org/d3.v5.min.js")
+  script.
+    var socket = io('//localhost:3000');
+    socket.on('update', function (data) {
+      let innerHTML = "";
+      for(let host in data){
+        innerHTML += `
+        <h1>${host}:</h1>
+        <p>${data[host].msg}</p>
+        <p>probe:${data[host].probe}</p>
+        <p>ping:${data[host].ping&&data[host].ping.avg}</p>
+        `
+      }
+      document.getElementById("content").innerHTML =innerHTML;
+      console.log(data);
+    });
