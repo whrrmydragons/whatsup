@@ -8,8 +8,11 @@ import Divider from '@material-ui/core/Divider';
 import SvgIcon from '@material-ui/core/SvgIcon';
 // import Status from '../Status/Status';
 import Icon from '@material-ui/core/Icon';
-import CheckCircle from '@material-ui/icons/Lens';
-
+import Status from '../Status/Status';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const DoughnutChart = require("react-chartjs").Doughnut;
 const _ = require('lodash/core');
@@ -20,19 +23,35 @@ const printSamples = (samples)=>{
       minWidth: 275,
        maxWidth: '300px',
        margin:'10px 10px',
+       paddingLeft:'10px',
+       paddingRight:'10px',
+       paddingBottom:'0',
        display:'flex',
        justifyContent:"center"
     }}>
     <CardContent>
-            <Icon color="error">
-                <CheckCircle/>
-            </Icon>
-          <span>Name: {sample.name}</span>
-          <Divider/>
-          {sample.pingDoughnut?<DoughnutChart data={sample.pingDoughnut}  />: <div><Loading/></div>}
-          {sample.probeDoughnut?<DoughnutChart data={sample.probeDoughnut} />: <div><Loading/></div>}
-          {sample.isAliveDoughnut?<DoughnutChart data={sample.isAliveDoughnut} />: <div><Loading/></div>}
-          <Divider/>
+    <List component="nav">
+        <ListItem button={false}>
+          <ListItemIcon>
+          <Status color="red"/>
+          </ListItemIcon>
+          <ListItemText primary={`${sample.name}`} inset={true} />
+        </ListItem>
+      </List>
+      <Divider />
+      <List component="nav">
+        <ListItem button={false}>
+        {sample.pingDoughnut?<DoughnutChart data={sample.pingDoughnut}  />: <div><Loading/></div>}
+        </ListItem>
+        <ListItem button={false}>
+        {sample.probeDoughnut?<DoughnutChart data={sample.probeDoughnut} />: <div><Loading/></div>}
+        </ListItem>
+        <ListItem button={false}>
+        {sample.isAliveDoughnut?<DoughnutChart data={sample.isAliveDoughnut} />: <div><Loading/></div>}
+        </ListItem>
+      </List>
+
+          
 
     </CardContent>
     </Card>
