@@ -8,16 +8,17 @@ block content
   script(src="https://d3js.org/d3.v5.min.js")
   script.
     var socket = io('//localhost:3001');
-    socket.on('update', function (data) {
-      let innerHTML = "";
-      for(let host in data){
+    socket.on('update', function (samples) { 
+      let innerHTML = `<h1>${samples.iter}</h1>`;
+      for(let host in samples.data){
         innerHTML += `
         <h1>${host}:</h1>
-        <p>${data[host].msg}</p>
-        <p>probe:${data[host].probe}</p>
-        <p>ping:${data[host].ping&&data[host].ping.avg}</p>
+        <p>${samples.data[host].msg}</p>
+        <p>probe:${samples.data[host].probe}</p>
+        <p>ping:${samples.data[host].ping&&samples.data[host].ping.avg}</p>
         `
       }
+      
       document.getElementById("content").innerHTML =innerHTML;
-      console.log(data);
+      console.log(samples);
     });

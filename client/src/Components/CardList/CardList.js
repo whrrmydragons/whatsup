@@ -8,49 +8,62 @@ import Divider from '@material-ui/core/Divider';
 import SvgIcon from '@material-ui/core/SvgIcon';
 // import Status from '../Status/Status';
 import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
 import Status from '../Status/Status';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import * as FontAwesome from 'react-icons/lib/fa'
 
 const DoughnutChart = require("react-chartjs").Doughnut;
 const _ = require('lodash/core');
 
-const printSamples = (samples)=>{
+const printSamples = (samples,socket)=>{
     return samples && _.map(samples,sample=>(
       <Card key={sample.name} style={{
       minWidth: 275,
        maxWidth: '300px',
        margin:'10px 10px',
-       paddingLeft:'10px',
-       paddingRight:'10px',
-       paddingBottom:'0',
+       padding:'0px 10px 0px',
        display:'flex',
-       justifyContent:"center"
+       justifyContent:"space-around"
     }}>
     <CardContent>
     <List component="nav">
         <ListItem button={false}>
-          <ListItemIcon>
-          <Status color="red"/>
-          </ListItemIcon>
+       
           <ListItemText primary={`${sample.name}`} inset={true} />
+          <ListItemIcon>
+          <Status color={sample.data.pingTest.fail>0?
+            (sample.data.pingTest.success/sample.data.pingTest.fail<1?"red":"orange")
+            :"green"}/>
+          </ListItemIcon>
         </ListItem>
-      </List>
-      <Divider />
-      <List component="nav">
+    </List>
+    <Divider/>
+    <List component="nav">
         <ListItem button={false}>
-        {sample.pingDoughnut?<DoughnutChart data={sample.pingDoughnut}  />: <div><Loading/></div>}
+        {sample.pingDoughnut?<DoughnutChart data={sample.pingDoughnut}/>: <div><Loading/></div>}
         </ListItem>
-        <ListItem button={false}>
+        {/* <ListItem button={false}>
         {sample.probeDoughnut?<DoughnutChart data={sample.probeDoughnut} />: <div><Loading/></div>}
         </ListItem>
         <ListItem button={false}>
         {sample.isAliveDoughnut?<DoughnutChart data={sample.isAliveDoughnut} />: <div><Loading/></div>}
+        </ListItem> */}
+    </List>
+    <List component="nav">
+        <ListItem onClick={()=>{socket.emit("vote",0)}}>
+       
+          <ListItemText primary={`${sample.name}`} inset={true} />
+          <ListItemIcon>
+            <IconButton>
+            <FontAwesome.FaThumbsDown/>
+            </IconButton>
+          </ListItemIcon>
         </ListItem>
-      </List>
-
+    </List>
           
 
     </CardContent>
@@ -61,6 +74,7 @@ const printSamples = (samples)=>{
 
 
 class CardList extends Component {
+
     render() {
       let { samples } = this.props.samples;
       let sampleList = printSamples(samples);
@@ -70,7 +84,7 @@ class CardList extends Component {
         flexWrap:'wrap',
         justifyContent:'space-between'
       }}>
-      { printSamples(this.props.samples)}
+      { printSamples(this.props.samples,this.props.socket)}
       </div>);
     }
   }

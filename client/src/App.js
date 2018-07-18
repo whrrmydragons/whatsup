@@ -6,6 +6,7 @@ import CardList from './Components/CardList/CardList';
 import AppBar from './Components/AppBar/AppBar';
 import { createMuiTheme,MuiThemeProvider } from '@material-ui/core/styles';
 
+
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -40,17 +41,16 @@ const failSuccessToDoughnut = (data)=>[ {
   color: "#46BFBD",
   highlight: "#5AD3D1",
   label: "Success"
-}];
+}
+];
 
 
-const socketToChartData = data =>_.map(data,(sample,key)=>{
+const socketToChartData = samples =>_.map(samples.data,(sample,key)=>{
   //console.log(sample);
   return {
   name:key,
   pingDoughnut:failSuccessToDoughnut(sample.pingTest),
-  probeDoughnut:failSuccessToDoughnut(sample.probeTest),
-  isAliveDoughnut:failSuccessToDoughnut(sample.isAliveTest),
-
+  data:sample,
   }
 });
 
@@ -65,16 +65,15 @@ class App extends Component {
   componentDidMount(){
     const {endpoint} = this.state;
     const socket = socketIOClient(endpoint);
-    socket.on("update",data=>this.setState({response:socketToChartData(data)}))
+    socket.on("update",samples=>this.setState({response:socketToChartData(samples),socket}));
+    socket.emit("vote","hello");
   }
   render() {
     let { response } = this.state;
-
-    console.log(response);
  
     return ( <MuiThemeProvider theme={theme}>
       <AppBar/>
-      <CardList samples={response}/>
+      <CardList samples={response} socket={this.state.socket}/>
     </MuiThemeProvider>);
   }
 }
