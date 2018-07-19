@@ -66,8 +66,11 @@ function update(){
 
     //TODO: finish iplementing voting system
 io.on('connection',socket=>{
+io.to(socket.id).emit("update",sample);// todo send all init data (current sampling and voting state)
     //console.log(socket.handshake.headers.host)
 socket.on('vote',(vote)=>{
+    if(sample.data[vote.name])
+    sample.data[vote.name].votes.count+=vote.state
     console.log(vote)
     console.log(socket.id)
 })

@@ -14,7 +14,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import * as FontAwesome from 'react-icons/lib/fa'
+import * as FontAwesome from 'react-icons/lib/fa';
 
 const DoughnutChart = require("react-chartjs").Doughnut;
 const _ = require('lodash/core');
@@ -54,9 +54,9 @@ const printSamples = (samples,socket)=>{
         </ListItem> */}
     </List>
     <List component="nav">
-        <ListItem onClick={()=>{socket.emit("vote",0)}}>
+        <ListItem onClick={()=>{socket.emit("vote",{name:sample.name,state:1})}}>
        
-          <ListItemText primary={`${sample.name}`} inset={true} />
+          <ListItemText primary={`${sample.data.votes.count}`} inset={true} />
           <ListItemIcon>
             <IconButton>
             <FontAwesome.FaThumbsDown/>
